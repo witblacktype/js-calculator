@@ -6,65 +6,58 @@ var calculator = {
     this.bindEvents();
   },
   cacheDom: function(){
-    this.$calc = $('#calculator');
-    this.$buttonArray = this.$calc.find('button');
-    this.$input = this.$calc.find('textarea');
-    console.log(this.$input[0]);
+    this.$calc = $('.calculator');
+    this.$buttonArray = this.$calc.find('.btn-calc');
+    this.$input = this.$calc.find('.input');
   },
   bindEvents: function(){
-    console.log(this.$buttonArray);
-
     this.$buttonArray.on('click', this.enterInput);
-
-    /*
-    this.$buttonArray.on('click', function(){
-      console.log(this.dataset.math + " Button: " + this.dataset.value);
-    });
-    */
-
-  },
-  enterInput: function(){
-    //this.$input[0].innerHTML = this.$buttonArray.dataset.value;
-    console.log(this.dataset.math);
-    console.log(this.dataset.value);
-
-  },
-  preview: function(){
-    console.log(this);
-    console.log(this.$calc);
   },
   render: function(){
     //updates the view from the (data) model
     this.$input[0].innerHTML = "new values";
-    console.log(this.$input[0].innerHTML);
   },
-  addValue: function(){
-    console.log(this.$button.data('value'));
+  enterInput: function(){
+    switch (this.dataset.math) {
+      case 'value':
+        //console.log('type is ' + this.dataset.math);
+        //console.log('value is of type ' + typeof this.dataset.value);
+        if (this.dataset.value === "."){
+          console.log(this);
+        }else{
+          console.log(this);
+        }
+        break;
+      case 'operator':
+        console.log('type is ' + this.dataset.math);
+        break;
+      case 'compute':
+        console.log('type is ' + this.dataset.math);
+        break;
+      default:
+        console.log('default case');
+        break;
+    }
+  },
+  enterDecimal: function(){
+    var decimalMatch = /\./;
+    if(decimalMatch.test(buffer) === false){
+        buffer += this.dataset.value;
+    }
+  },
+  enterValue: function(){
+    var decimalMatch = /\./;
+    if(decimalMatch.test(buffer) === false){
+        buffer += this.dataset.value;
+    }
+  },
+  enterDigit: function(digit){
+    buffer += digit.value;
+    if(prevValue === ""){
+      document.getElementById('input').innerHTML = buffer;
+    }else{
+      document.getElementById('input').innerHTML = document.getElementById('input').innerHTML + buffer;
+    }
   }
 };
 calculator.init();
-
-/*
-$('button').on('click', function(){
-  //parse button.value
-  var obj = $(this);
-  var type = $(this).data('math');
-  var val = $(this).data('value');
-
-  //find if button type is value, operator, or compute
-  switch (type) {
-    case 'value':
-      console.log('type is ' + type);
-      break;
-    case 'operator':
-      console.log('type is ' + type);
-      break;
-    case 'compute':
-      console.log('type is ' + type);
-      break;
-    default:
-      console.log('default case');
-      break;
-  }
-});
-*/
