@@ -15,7 +15,7 @@ var calculator = {
   },
   render: function(){
     //updates the view from the (data) model
-    this.$input[0].innerHTML = "new values";
+    this.$input[0].innerHTML = this.buffer;
   },
   enterInput: function(){
     switch (this.dataset.math) {
@@ -23,13 +23,13 @@ var calculator = {
         //console.log('type is ' + this.dataset.math);
         //console.log('value is of type ' + typeof this.dataset.value);
         if (this.dataset.value === "."){
-          console.log(this);
+          calculator.enterDecimal(this.dataset.value);
         }else{
-          console.log(this);
+          calculator.enterDigit(this.dataset.value);
         }
         break;
       case 'operator':
-        console.log('type is ' + this.dataset.math);
+        calculator.operation(this.dataset.value);
         break;
       case 'compute':
         console.log('type is ' + this.dataset.math);
@@ -39,24 +39,35 @@ var calculator = {
         break;
     }
   },
-  enterDecimal: function(){
+  enterDecimal: function(decimal){
     var decimalMatch = /\./;
-    if(decimalMatch.test(buffer) === false){
-        buffer += this.dataset.value;
-    }
-  },
-  enterValue: function(){
-    var decimalMatch = /\./;
-    if(decimalMatch.test(buffer) === false){
-        buffer += this.dataset.value;
+    if(decimalMatch.test(calculator.buffer) === false){
+      calculator.buffer += decimal;
+      calculator.render();
     }
   },
   enterDigit: function(digit){
-    buffer += digit.value;
-    if(prevValue === ""){
-      document.getElementById('input').innerHTML = buffer;
+    if(calculator.buffer === ""){
+      calculator.buffer = digit;
     }else{
-      document.getElementById('input').innerHTML = document.getElementById('input').innerHTML + buffer;
+      calculator.buffer += digit;
+    }
+    calculator.render();
+  },
+  operation: function(operand){
+    switch (operand){
+      case '+':
+
+        break;
+      case '-':
+
+        break;
+      case '*':
+
+        break;
+      case '/':
+
+        break;
     }
   }
 };
