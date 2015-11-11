@@ -4,10 +4,11 @@
 
 ###Required Utilites
 
--npm https://www.npmjs.com/
-Installing node with also install npm. Node https://nodejs.org/en/
--bower http://bower.io/
--grunt-cli http://gruntjs.com/getting-started
+- npm https://www.npmjs.com/
+- bower http://bower.io/
+- grunt-cli http://gruntjs.com/getting-started
+
+Notes: Installing node with also install npm https://nodejs.org/en/
 
 ###Setup and Build
 
@@ -15,7 +16,7 @@ Install dependencies with Bower.
 
     $ bower install
 
-Install Node Modules
+Install Node Modules.
 
     $ npm install
 
@@ -29,6 +30,6 @@ The default Grunt task will run ````grunt build```` as one of its tasks.
 
     $ grunt
 
-A local server can run the source files using
+Grunt can serve the local source code files.
 
     $ grunt serve
