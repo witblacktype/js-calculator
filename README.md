@@ -8,7 +8,7 @@
 - bower http://bower.io/
 - grunt-cli http://gruntjs.com/getting-started
 
-Notes: Installing node with also install npm https://nodejs.org/en/
+Notes: Installing node will also install npm https://nodejs.org/en/
 
 ###Setup and Build
 
