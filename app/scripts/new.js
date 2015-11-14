@@ -1,11 +1,49 @@
 'use strict';
+/* Refactoring notes:
+
+- refactor validateInput() function to return true if the input is valid
+validateInput: function(type, value){
+  switch (type) {
+    case 'value':
+      //console.log('type is ' + this.dataset.math);
+      //console.log('value is of type ' + typeof this.dataset.value);
+      if (value === '.'){
+        calculator.enterDecimal(value);
+      }else{
+        calculator.enterDigit(value);
+      }
+      break;
+    case 'operator':
+      calculator.operation(value);
+      break;
+    case 'compute':
+      calculator.compute();
+      break;
+    case 'clear':
+      calculator.clearButton();
+      break;
+    default:
+      console.log('default case');
+      break;
+  }
+
+
+
+
+
+
+
+
+*/
 var calculator = {
+  // remove these global variables and use the dataModel instead
   buffer: '',
   prevValue: '',
   symbol: '',
   eqSymbol: '=',
   model: '',
   result: '',
+  // ------------------------------------------------------------
   dataModel: {
     buffer: '',
     prevValue: '',
@@ -31,8 +69,15 @@ var calculator = {
     //bind click event context to enterInput function
     calculator.$buttonArray.on('click', calculator.enterInput);
   },
-  updateModel: function(){
-    calculator.model = calculator.prevValue + ' ' + calculator.symbol + ' ' + calculator.buffer + ' ' + calculator.eqSymbol + ' ' + calculator.result;
+  enterInput: function(){
+    var validation = calculator.validateInput(this.dataset.math, this.dataset.value);
+    if( validation === true){
+      calculator.updateDataModel(this.dataset.math, this.dataset.value);
+    }
+  },
+
+  updateDataModel: function(type, value){
+    return type + value;
   },
   updateViewModel: function(){
     var output = calculator.dataModel.buffer;
@@ -49,9 +94,7 @@ var calculator = {
     //calculator.$input[0].innerHTML = calculator.buffer;
     calculator.$input[0].innerHTML = calculator.model;
   },
-  enterInput: function(){
-    var type = this.dataset.math;
-    var value = this.dataset.value;
+  validateInput: function(type, value){
     switch (type) {
       case 'value':
         //console.log('type is ' + this.dataset.math);
@@ -70,7 +113,6 @@ var calculator = {
         break;
       case 'clear':
         calculator.clearButton();
-        console.log('type is clear');
         break;
       default:
         console.log('default case');
@@ -140,10 +182,6 @@ var calculator = {
   compute: function(){
     var input1 = parseFloat(calculator.prevValue);
     var input2 = parseFloat(calculator.buffer);
-    //var output;
-    console.log(input1);
-    console.log(input2);
-    console.log(calculator.symbol);
     switch (calculator.symbol){
       case '+':
         calculator.result = input1 + input2;
@@ -166,9 +204,9 @@ var calculator = {
         calculator.render();
         break;
     }
-
-
-
+  },
+  updateModel: function(){
+    calculator.model = calculator.prevValue + ' ' + calculator.symbol + ' ' + calculator.buffer + ' ' + calculator.eqSymbol + ' ' + calculator.result;
   }
 };
 calculator.init();
