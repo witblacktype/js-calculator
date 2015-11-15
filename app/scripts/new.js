@@ -37,24 +37,20 @@ validateInput: function(type, value){
 */
 var calculator = {
   // remove these global variables and use the dataModel instead
-  buffer: '',
-  prevValue: '',
-  symbol: '',
-  eqSymbol: '=',
   model: '',
-  result: '',
   // ------------------------------------------------------------
   dataModel: {
     buffer: '',
     prevValue: '',
     symbol: '',
     result: '',
+    dataArray: []
   },
   viewModel: {
     buffer: '',
     prevValue: '',
     symbol: '',
-    display: '',
+    display: ''
   },
   init: function(){
     this.cacheDom();
@@ -100,6 +96,7 @@ var calculator = {
         //console.log('type is ' + this.dataset.math);
         //console.log('value is of type ' + typeof this.dataset.value);
         if (value === '.'){
+          //var decimalMatch = /\./;
           calculator.enterDecimal(value);
         }else{
           calculator.enterDigit(value);
@@ -121,17 +118,17 @@ var calculator = {
   },
   enterDecimal: function(decimal){
     var decimalMatch = /\./;
-    if(decimalMatch.test(calculator.buffer) === false){
-      calculator.buffer += decimal;
+    if(decimalMatch.test(calculator.dataModel.buffer) === false){
+      calculator.dataModel.buffer += decimal;
       calculator.updateModel();
       calculator.render();
     }
   },
   enterDigit: function(digit){
-    if(calculator.buffer === ''){
-      calculator.buffer = digit;
+    if(calculator.dataModel.buffer === ''){
+      calculator.dataModel.buffer = digit;
     }else{
-      calculator.buffer += digit;
+      calculator.dataModel.buffer += digit;
     }
     calculator.updateModel();
     calculator.render();
@@ -139,30 +136,30 @@ var calculator = {
   operation: function(operand){
     switch (operand){
       case 'add':
-        calculator.symbol = '+';
+        calculator.dataModel.symbol = '+';
         break;
       case 'subtract':
-        calculator.symbol = '-';
+        calculator.dataModel.symbol = '-';
         break;
       case 'multiply':
-        calculator.symbol = '*';
+        calculator.dataModel.symbol = '*';
         break;
       case 'divide':
-        calculator.symbol = '/';
+        calculator.dataModel.symbol = '/';
         break;
     }
 
 
 
     if (calculator.prevValue !== ''){
-      if (calculator.buffer !== ''){
+      if (calculator.dataModel.buffer !== ''){
         calculator.compute();
       }
     }
-    if(calculator.prevValue === ''){
+    if(calculator.dataModel.prevValue === ''){
       //calculator.symbol = operand;
-      calculator.prevValue = calculator.buffer;
-      calculator.buffer = '';
+      calculator.dataModel.prevValue = calculator.dataModel.buffer;
+      calculator.dataModel.buffer = '';
     }
 
     calculator.updateModel();
@@ -172,41 +169,41 @@ var calculator = {
 
   },
   clearButton: function(){
-    calculator.buffer = '';
-    calculator.prevValue = '';
-    calculator.symbol = '';
-    calculator.result = '';
+    calculator.dataModel.buffer = '';
+    calculator.dataModel.prevValue = '';
+    calculator.dataModel.symbol = '';
+    calculator.dataModel.result = '';
     calculator.updateModel();
     calculator.render();
   },
   compute: function(){
-    var input1 = parseFloat(calculator.prevValue);
-    var input2 = parseFloat(calculator.buffer);
+    var input1 = parseFloat(calculator.dataModel.prevValue);
+    var input2 = parseFloat(calculator.dataModel.buffer);
     switch (calculator.symbol){
       case '+':
-        calculator.result = input1 + input2;
+        calculator.dataModel.result = input1 + input2;
         calculator.updateModel();
         calculator.render();
         break;
       case '-':
-        calculator.result = input1 - input2;
+        calculator.dataModel.result = input1 - input2;
         calculator.updateModel();
         calculator.render();
         break;
       case '*':
-        calculator.result = input1 * input2;
+        calculator.dataModel.result = input1 * input2;
         calculator.updateModel();
         calculator.render();
         break;
       case '/':
-        calculator.result = input1 / input2;
+        calculator.dataModel.result = input1 / input2;
         calculator.updateModel();
         calculator.render();
         break;
     }
   },
   updateModel: function(){
-    calculator.model = calculator.prevValue + ' ' + calculator.symbol + ' ' + calculator.buffer + ' ' + calculator.eqSymbol + ' ' + calculator.result;
+    calculator.model = calculator.dataModel.prevValue + ' ' + calculator.dataModel.symbol + ' ' + calculator.dataModel.buffer + ' ' + calculator.dataModel.result;
   }
 };
 calculator.init();
