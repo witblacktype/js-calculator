@@ -77,12 +77,12 @@ var calculator = {
   },
   updateViewModel: function(){
     var output = calculator.dataModel.buffer;
-      if (calculator.viewModel.prevValue !== ''){
-        output += ' ' + calculator.dataModel.symbol + ' ' + calculator.dataModel.prevValue;
-      }
-      if (calculator.viewModel.result !== ''){
-        output += ' = ' + calculator.dataModel.result;
-      }
+    if (calculator.viewModel.prevValue !== ''){
+      output += ' ' + calculator.dataModel.symbol + ' ' + calculator.dataModel.prevValue;
+    }
+    if (calculator.viewModel.result !== ''){
+      output += ' = ' + calculator.dataModel.result;
+    }
     return output;
   },
   render: function(){
@@ -92,28 +92,27 @@ var calculator = {
   },
   validateInput: function(type, value){
     switch (type) {
-      case 'value':
+    case 'value':
         //console.log('type is ' + this.dataset.math);
         //console.log('value is of type ' + typeof this.dataset.value);
-        if (value === '.'){
-          //var decimalMatch = /\./;
-          calculator.enterDecimal(value);
-        }else{
-          calculator.enterDigit(value);
-        }
-        break;
-      case 'operator':
-        calculator.operation(value);
-        break;
-      case 'compute':
-        calculator.compute();
-        break;
-      case 'clear':
-        calculator.clearButton();
-        break;
-      default:
-        console.log('default case');
-        break;
+      if (value === '.'){
+        //var decimalMatch = /\./;
+        calculator.enterDecimal(value);
+      }else{
+        calculator.enterDigit(value);
+      }
+      break;
+    case 'operator':
+      calculator.operation(value);
+      break;
+    case 'compute':
+      calculator.compute();
+      break;
+    case 'clear':
+      calculator.clearButton();
+      break;
+    default:
+      break;
     }
   },
   enterDecimal: function(decimal){
@@ -135,18 +134,18 @@ var calculator = {
   },
   operation: function(operand){
     switch (operand){
-      case 'add':
-        calculator.dataModel.symbol = '+';
-        break;
-      case 'subtract':
-        calculator.dataModel.symbol = '-';
-        break;
-      case 'multiply':
-        calculator.dataModel.symbol = '*';
-        break;
-      case 'divide':
-        calculator.dataModel.symbol = '/';
-        break;
+    case 'add':
+      calculator.dataModel.symbol = '+';
+      break;
+    case 'subtract':
+      calculator.dataModel.symbol = '-';
+      break;
+    case 'multiply':
+      calculator.dataModel.symbol = '*';
+      break;
+    case 'divide':
+      calculator.dataModel.symbol = '/';
+      break;
     }
 
 
@@ -180,26 +179,26 @@ var calculator = {
     var input1 = parseFloat(calculator.dataModel.prevValue);
     var input2 = parseFloat(calculator.dataModel.buffer);
     switch (calculator.symbol){
-      case '+':
-        calculator.dataModel.result = input1 + input2;
-        calculator.updateModel();
-        calculator.render();
-        break;
-      case '-':
-        calculator.dataModel.result = input1 - input2;
-        calculator.updateModel();
-        calculator.render();
-        break;
-      case '*':
-        calculator.dataModel.result = input1 * input2;
-        calculator.updateModel();
-        calculator.render();
-        break;
-      case '/':
-        calculator.dataModel.result = input1 / input2;
-        calculator.updateModel();
-        calculator.render();
-        break;
+    case '+':
+      calculator.dataModel.result = input1 + input2;
+      calculator.updateModel();
+      calculator.render();
+      break;
+    case '-':
+      calculator.dataModel.result = input1 - input2;
+      calculator.updateModel();
+      calculator.render();
+      break;
+    case '*':
+      calculator.dataModel.result = input1 * input2;
+      calculator.updateModel();
+      calculator.render();
+      break;
+    case '/':
+      calculator.dataModel.result = input1 / input2;
+      calculator.updateModel();
+      calculator.render();
+      break;
     }
   },
   updateModel: function(){
