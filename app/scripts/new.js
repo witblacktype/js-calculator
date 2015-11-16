@@ -1,38 +1,6 @@
 'use strict';
 /* Refactoring notes:
 
-- refactor validateInput() function to return true if the input is valid
-validateInput: function(type, value){
-  switch (type) {
-    case 'value':
-      //console.log('type is ' + this.dataset.math);
-      //console.log('value is of type ' + typeof this.dataset.value);
-      if (value === '.'){
-        calculator.enterDecimal(value);
-      }else{
-        calculator.enterDigit(value);
-      }
-      break;
-    case 'operator':
-      calculator.operation(value);
-      break;
-    case 'compute':
-      calculator.compute();
-      break;
-    case 'clear':
-      calculator.clearButton();
-      break;
-    default:
-      console.log('default case');
-      break;
-  }
-
-
-
-
-
-
-
 
 */
 var calculator = {
@@ -71,9 +39,52 @@ var calculator = {
       calculator.updateDataModel(this.dataset.math, this.dataset.value);
     }
   },
-
+  validateInput: function(type, value){
+    switch (type) {
+    case 'value':
+      if (value === '.'){
+        var decimalMatch = /\./;
+        if(decimalMatch.test(calculator.dataModel.buffer) === true){
+          return false;
+        }
+      }
+      return true;
+    case 'operator':
+      if( calculator.dataModel.symbol !== ''){
+        return false;
+      }
+      return true;
+    case 'compute':
+      if ( calculator.dataModel.buffer === '' || calculator.dataModel.symbol === '' || calculator.dataModel.prevValue === ''){
+        return false;
+      }
+      return true;
+    case 'clear':
+      return true;
+    default:
+      return false;
+    }
+  },
   updateDataModel: function(type, value){
-    return type + value;
+    if(type === 'value'){
+      calculator.dataModel.buffer += value;
+    }
+    if(type === 'operator'){
+      switch (value){
+      case 'add':
+        calculator.dataModel.symbol = '+';
+        break;
+      case 'subtract':
+        calculator.dataModel.symbol = '-';
+        break;
+      case 'multiply':
+        calculator.dataModel.symbol = '*';
+        break;
+      case 'divide':
+        calculator.dataModel.symbol = '/';
+        break;
+      }
+    }
   },
   updateViewModel: function(){
     var output = calculator.dataModel.buffer;
@@ -90,66 +101,7 @@ var calculator = {
     //calculator.$input[0].innerHTML = calculator.buffer;
     calculator.$input[0].innerHTML = calculator.model;
   },
-  validateInput: function(type, value){
-    switch (type) {
-    case 'value':
-        //console.log('type is ' + this.dataset.math);
-        //console.log('value is of type ' + typeof this.dataset.value);
-      if (value === '.'){
-        //var decimalMatch = /\./;
-        calculator.enterDecimal(value);
-      }else{
-        calculator.enterDigit(value);
-      }
-      break;
-    case 'operator':
-      calculator.operation(value);
-      break;
-    case 'compute':
-      calculator.compute();
-      break;
-    case 'clear':
-      calculator.clearButton();
-      break;
-    default:
-      break;
-    }
-  },
-  enterDecimal: function(decimal){
-    var decimalMatch = /\./;
-    if(decimalMatch.test(calculator.dataModel.buffer) === false){
-      calculator.dataModel.buffer += decimal;
-      calculator.updateModel();
-      calculator.render();
-    }
-  },
-  enterDigit: function(digit){
-    if(calculator.dataModel.buffer === ''){
-      calculator.dataModel.buffer = digit;
-    }else{
-      calculator.dataModel.buffer += digit;
-    }
-    calculator.updateModel();
-    calculator.render();
-  },
-  operation: function(operand){
-    switch (operand){
-    case 'add':
-      calculator.dataModel.symbol = '+';
-      break;
-    case 'subtract':
-      calculator.dataModel.symbol = '-';
-      break;
-    case 'multiply':
-      calculator.dataModel.symbol = '*';
-      break;
-    case 'divide':
-      calculator.dataModel.symbol = '/';
-      break;
-    }
-
-
-
+  operation: function(){
     if (calculator.prevValue !== ''){
       if (calculator.dataModel.buffer !== ''){
         calculator.compute();
@@ -160,12 +112,8 @@ var calculator = {
       calculator.dataModel.prevValue = calculator.dataModel.buffer;
       calculator.dataModel.buffer = '';
     }
-
     calculator.updateModel();
     calculator.render();
-
-
-
   },
   clearButton: function(){
     calculator.dataModel.buffer = '';
