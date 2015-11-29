@@ -1,12 +1,5 @@
 'use strict';
-/* Refactoring notes:
-
-
-*/
 var calculator = {
-  // remove these global variables and use the dataModel instead
-  model: '',
-  // ------------------------------------------------------------
   dataModel: {
     buffer: '',
     prevValue: '',
@@ -18,6 +11,7 @@ var calculator = {
     buffer: '',
     prevValue: '',
     symbol: '',
+    result: '',
     display: ''
   },
   init: function(){
@@ -37,7 +31,9 @@ var calculator = {
     var validation = calculator.validateInput(this.dataset.math, this.dataset.value);
     if( validation === true){
       calculator.updateDataModel(this.dataset.math, this.dataset.value);
+      calculator.updateViewModel();
     }
+    calculator.render();
   },
   validateInput: function(type, value){
     switch (type) {
@@ -73,33 +69,39 @@ var calculator = {
       switch (value){
       case 'add':
         calculator.dataModel.symbol = '+';
+        calculator.operation();
         break;
       case 'subtract':
         calculator.dataModel.symbol = '-';
+        calculator.operation();
         break;
       case 'multiply':
         calculator.dataModel.symbol = '*';
+        calculator.operation();
         break;
       case 'divide':
         calculator.dataModel.symbol = '/';
+        calculator.operation();
         break;
       }
     }
+    if(type === 'compute'){
+      calculator.compute();
+    }
+    if(type === 'clear'){
+      calculator.clearButton();
+    }
   },
   updateViewModel: function(){
-    var output = calculator.dataModel.buffer;
-    if (calculator.viewModel.prevValue !== ''){
-      output += ' ' + calculator.dataModel.symbol + ' ' + calculator.dataModel.prevValue;
-    }
-    if (calculator.viewModel.result !== ''){
-      output += ' = ' + calculator.dataModel.result;
-    }
-    return output;
+    calculator.viewModel.buffer = calculator.dataModel.buffer;
+    calculator.viewModel.symbol = calculator.dataModel.symbol;
+    calculator.viewModel.prevValue = calculator.dataModel.prevValue;
+    calculator.viewModel.result = calculator.dataModel.result;
   },
   render: function(){
-    //updates the view from the (data) model
-    //calculator.$input[0].innerHTML = calculator.buffer;
-    calculator.$input[0].innerHTML = calculator.model;
+    //updates the viewModel.display from the viewModel object
+    calculator.viewModel.display = calculator.viewModel.prevValue + ' ' + calculator.viewModel.symbol + ' ' + calculator.viewModel.buffer + ' ' + ' = ' + calculator.viewModel.result;
+    calculator.$input[0].innerHTML = calculator.viewModel.display;
   },
   operation: function(){
     if (calculator.prevValue !== ''){
@@ -108,11 +110,10 @@ var calculator = {
       }
     }
     if(calculator.dataModel.prevValue === ''){
-      //calculator.symbol = operand;
       calculator.dataModel.prevValue = calculator.dataModel.buffer;
       calculator.dataModel.buffer = '';
     }
-    calculator.updateModel();
+    calculator.updateViewModel();
     calculator.render();
   },
   clearButton: function(){
@@ -120,37 +121,27 @@ var calculator = {
     calculator.dataModel.prevValue = '';
     calculator.dataModel.symbol = '';
     calculator.dataModel.result = '';
-    calculator.updateModel();
+    calculator.updateViewModel();
     calculator.render();
   },
   compute: function(){
     var input1 = parseFloat(calculator.dataModel.prevValue);
     var input2 = parseFloat(calculator.dataModel.buffer);
-    switch (calculator.symbol){
+    switch (calculator.dataModel.symbol){
     case '+':
+      console.log('compute');
       calculator.dataModel.result = input1 + input2;
-      calculator.updateModel();
-      calculator.render();
       break;
     case '-':
       calculator.dataModel.result = input1 - input2;
-      calculator.updateModel();
-      calculator.render();
       break;
     case '*':
       calculator.dataModel.result = input1 * input2;
-      calculator.updateModel();
-      calculator.render();
       break;
     case '/':
       calculator.dataModel.result = input1 / input2;
-      calculator.updateModel();
-      calculator.render();
       break;
     }
-  },
-  updateModel: function(){
-    calculator.model = calculator.dataModel.prevValue + ' ' + calculator.dataModel.symbol + ' ' + calculator.dataModel.buffer + ' ' + calculator.dataModel.result;
   }
 };
 calculator.init();
