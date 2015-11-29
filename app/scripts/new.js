@@ -89,40 +89,13 @@ var calculator = {
       calculator.compute();
     }
     if(type === 'clear'){
-      calculator.clearButton();
-    }
-  },
-  updateViewModel: function(){
-    calculator.viewModel.buffer = calculator.dataModel.buffer;
-    calculator.viewModel.symbol = calculator.dataModel.symbol;
-    calculator.viewModel.prevValue = calculator.dataModel.prevValue;
-    calculator.viewModel.result = calculator.dataModel.result;
-  },
-  render: function(){
-    //updates the viewModel.display from the viewModel object
-    calculator.viewModel.display = calculator.viewModel.prevValue + ' ' + calculator.viewModel.symbol + ' ' + calculator.viewModel.buffer + ' ' + ' = ' + calculator.viewModel.result;
-    calculator.$input[0].innerHTML = calculator.viewModel.display;
-  },
-  operation: function(){
-    if (calculator.prevValue !== ''){
-      if (calculator.dataModel.buffer !== ''){
-        calculator.compute();
+      if (value === 'AC') {
+        calculator.allClear();
+      }
+      if (value === 'CE'){
+        calculator.clearEntry();
       }
     }
-    if(calculator.dataModel.prevValue === ''){
-      calculator.dataModel.prevValue = calculator.dataModel.buffer;
-      calculator.dataModel.buffer = '';
-    }
-    calculator.updateViewModel();
-    calculator.render();
-  },
-  clearButton: function(){
-    calculator.dataModel.buffer = '';
-    calculator.dataModel.prevValue = '';
-    calculator.dataModel.symbol = '';
-    calculator.dataModel.result = '';
-    calculator.updateViewModel();
-    calculator.render();
   },
   compute: function(){
     var input1 = parseFloat(calculator.dataModel.prevValue);
@@ -141,6 +114,56 @@ var calculator = {
       calculator.dataModel.result = input1 / input2;
       break;
     }
+  },
+  operation: function(){
+    if (calculator.dataModel.prevValue !== ''){
+      if (calculator.dataModel.buffer !== ''){
+        calculator.compute();
+      }
+    }
+    if(calculator.dataModel.prevValue === ''){
+      calculator.dataModel.prevValue = calculator.dataModel.buffer;
+      calculator.dataModel.buffer = '';
+    }
+  },
+  allClear: function(){
+    calculator.dataModel.buffer = '';
+    calculator.dataModel.prevValue = '';
+    calculator.dataModel.symbol = '';
+    calculator.dataModel.result = '';
+  },
+  clearEntry: function(){
+    if (calculator.dataModel.result !== '') {
+      calculator.dataModel.result = '';
+    }
+    else if (calculator.dataModel.buffer === '' && calculator.dataModel.symbol === '') {
+      calculator.dataModel.prevValue = '';
+    }
+    else if (calculator.dataModel.buffer === '' && calculator.dataModel.symbol !== '') {
+      calculator.dataModel.symbol = '';
+    }
+    else if (calculator.dataModel.buffer !== '') {
+      calculator.dataModel.buffer = '';
+    }
+  },
+  updateViewModel: function(){
+    calculator.viewModel.buffer = calculator.dataModel.buffer;
+    calculator.viewModel.symbol = calculator.dataModel.symbol;
+    calculator.viewModel.prevValue = calculator.dataModel.prevValue;
+    calculator.viewModel.result = calculator.dataModel.result;
+  },
+  render: function(){
+    //updates the viewModel.display from the viewModel object
+    if(calculator.viewModel.prevValue === ''){
+      calculator.viewModel.display = calculator.viewModel.buffer;
+    }
+    if(calculator.viewModel.prevValue !== ''){
+      calculator.viewModel.display = calculator.viewModel.prevValue + ' ' + calculator.viewModel.symbol + ' ' + calculator.viewModel.buffer;
+    }
+    if(calculator.viewModel.result !== ''){
+      calculator.viewModel.display = calculator.viewModel.prevValue + ' ' + calculator.viewModel.symbol + ' ' + calculator.viewModel.buffer + ' ' + ' = ' + calculator.viewModel.result;
+    }
+    calculator.$input[0].innerHTML = calculator.viewModel.display;
   }
 };
 calculator.init();
