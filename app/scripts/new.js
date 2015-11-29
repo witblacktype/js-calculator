@@ -129,7 +129,6 @@ var calculator = {
     var input2 = parseFloat(calculator.dataModel.buffer);
     switch (calculator.dataModel.symbol){
     case '+':
-      console.log('compute');
       calculator.dataModel.result = input1 + input2;
       break;
     case '-':
