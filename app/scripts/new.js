@@ -57,6 +57,8 @@ var calculator = {
       return true;
     case 'clear':
       return true;
+    case 'sign':
+      return true;
     default:
       return false;
     }
@@ -96,6 +98,24 @@ var calculator = {
         calculator.clearEntry();
       }
     }
+    if (type === 'sign') {
+      if (calculator.dataModel.buffer.charAt(0) === '-') {
+        calculator.dataModel.buffer = calculator.dataModel.buffer.substr(1);
+      }else{
+        calculator.dataModel.buffer = '-' + calculator.dataModel.buffer;
+      }
+    }
+  },
+  operation: function(){
+    if (calculator.dataModel.prevValue !== ''){
+      if (calculator.dataModel.buffer !== ''){
+        calculator.compute();
+      }
+    }
+    if(calculator.dataModel.prevValue === ''){
+      calculator.dataModel.prevValue = calculator.dataModel.buffer;
+      calculator.dataModel.buffer = '';
+    }
   },
   compute: function(){
     var input1 = parseFloat(calculator.dataModel.prevValue);
@@ -113,17 +133,6 @@ var calculator = {
     case '/':
       calculator.dataModel.result = input1 / input2;
       break;
-    }
-  },
-  operation: function(){
-    if (calculator.dataModel.prevValue !== ''){
-      if (calculator.dataModel.buffer !== ''){
-        calculator.compute();
-      }
-    }
-    if(calculator.dataModel.prevValue === ''){
-      calculator.dataModel.prevValue = calculator.dataModel.buffer;
-      calculator.dataModel.buffer = '';
     }
   },
   allClear: function(){
