@@ -46,9 +46,11 @@ var calculator = {
       }
       return true;
     case 'operator':
+    /*
       if( calculator.dataModel.symbol !== ''){
         return false;
       }
+      */
       return true;
     case 'compute':
       if ( calculator.dataModel.buffer === '' || calculator.dataModel.symbol === '' || calculator.dataModel.prevValue === ''){
@@ -68,24 +70,34 @@ var calculator = {
       calculator.dataModel.buffer += value;
     }
     if(type === 'operator'){
-      switch (value){
-      case 'add':
-        calculator.dataModel.symbol = '+';
-        calculator.operation();
-        break;
-      case 'subtract':
-        calculator.dataModel.symbol = '-';
-        calculator.operation();
-        break;
-      case 'multiply':
-        calculator.dataModel.symbol = '*';
-        calculator.operation();
-        break;
-      case 'divide':
-        calculator.dataModel.symbol = '/';
-        calculator.operation();
-        break;
+      if( calculator.dataModel.symbol === ''){
+        switch (value){
+        case 'add':
+          calculator.dataModel.symbol = '+';
+          calculator.operation();
+          break;
+        case 'subtract':
+          calculator.dataModel.symbol = '-';
+          calculator.operation();
+          break;
+        case 'multiply':
+          calculator.dataModel.symbol = '*';
+          calculator.operation();
+          break;
+        case 'divide':
+          calculator.dataModel.symbol = '/';
+          calculator.operation();
+          break;
+        }
       }
+/*
+      else{
+        if(calculator.dataModel.buffer !== '' && calculator.dataModel.prevValue !== ''){
+          calculator.compute();
+          console.log('compute');
+        }
+      }
+*/
     }
     if(type === 'compute'){
       calculator.compute();
